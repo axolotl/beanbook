@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { Link } from 'react-router-dom'
+import { StyleSheet, Text, View, Button } from 'react-native'
 
 class App extends Component {
   render() {
+    const { history } = this.props
+
     return (
       <View style={styles.box}>
         <Text style={styles.text}>This is the second page</Text>
-        <Link to="/">Go back home</Link>
+        <Button title="Go back" onPress={() => history.push('/')} />
       </View>
     )
   }

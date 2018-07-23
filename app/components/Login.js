@@ -4,9 +4,6 @@ import { Text, View, Button, TextInput } from 'react-native'
 //  import styles
 import login from '../styles/login'
 
-// import graphql
-import Test from '../graphql/test'
-
 class Login extends Component {
   state = {
     username: '',
@@ -25,7 +22,6 @@ class Login extends Component {
 
     return (
       <View style={login.box}>
-        <Test />
         <Text>Please enter username and password to log in</Text>
         <TextInput
           placeholder='username'

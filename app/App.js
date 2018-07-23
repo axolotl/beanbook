@@ -3,7 +3,9 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { View } from 'react-native'
 
 // import components
+import Home from './components/Home'
 import Header from './components/Header'
+//import Search from './components/Search'
 import Login from './components/Login'
 import SecondPage from './components/SecondPage'
 
@@ -15,7 +17,11 @@ const App = () => (
     <View style={global.page}>
       <View style={global.pageContents}>
         <Header />
-        <Route exact path="/" render={props => <Login {...props} />} />
+
+        {/* <Search /> search to be added later*/}
+        
+        <Route exact path="/" render={props => <Home {...props} />} />
+        <Route path="/login" render={props => <Login {...props} />} />
         <Route path="/second-page" render={props => <SecondPage {...props} />} />
       </View>
     </View>

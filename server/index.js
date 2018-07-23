@@ -1,47 +1,58 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const { graphqlExpress, graphiqlExpress } = require('apollo-server-express')
-const { makeExecutableSchema } = require('graphql-tools')
+const { GraphQLServer } = require('graphql-yoga')
+const { Prisma } = require('prisma-binding')
+const Query = require('./resolvers/Query')
+const Mutation = require('./resolvers/Mutation')
+const AuthPayload = require('./resolvers/AuthPayload')
+const Subscription = require('./resolvers/Subscription')
+const Feed = require('./resolvers/Feed')
 
-// Some fake data
-const books = [
-  {
-    title: "Harry Potter and the Sorcerer's stone",
-    author: 'J.K. Rowling'
-  },
-  {
-    title: 'Jurassic Park',
-    author: 'Michael Crichton'
-  }
-]
+// resolvers
+// let links = [{
+//   id: 'link-0',
+//   url: 'www.howtographql.com',
+//   description: 'Fullstack tutorial for GraphQL'
+// }]
 
-// The GraphQL schema in string form
-const typeDefs = `
-  type Query { books: [Book] }
-  type Book { title: String, author: String }
-`
+// let idCount = links.length
+// const resolvers = {
+//   Query: {
+//     info: () => `This is the API of a Hackernews Clone`,
+//     feed: () => links,
+//   },
+//   Mutation: {
+//     post: (root, args) => {
+//        const link = {
+//         id: `link-${idCount++}`,
+//         description: args.description,
+//         url: args.url,
+//       }
+//       links.push(link)
+//       return link
+//     }
+//   },
+// }
 
-// The resolvers
 const resolvers = {
-  Query: { books: () => books }
+  Query,
+  Mutation,
+  AuthPayload,
+  Subscription,
+  Feed,
 }
 
-// Put together a schema
-const schema = makeExecutableSchema({
-  typeDefs,
-  resolvers
+// server
+const server = new GraphQLServer({
+  typeDefs: './server/schema.graphql',
+  resolvers,
+  context: req => ({
+    ...req,
+    db: new Prisma({
+      typeDefs: 'server/generated/prisma.graphql',
+      endpoint: 'https://eu1.prisma.sh/samuel-machat-cd22fd/database/dev',
+      secret: 'secretkitchensink',
+      debug: true,
+    })
+  })
 })
 
-// Initialize the app
-const app = express()
-
-// The GraphQL endpoint
-app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }))
-
-// GraphiQL, a visual editor for queries
-app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }))
-
-// Start the server
-app.listen(8000, () => {
-  console.log('Go to http://localhost:8000/graphiql to run queries!')
-})
+server.start(() => console.log(`Server is running on http://localhost:4000`))

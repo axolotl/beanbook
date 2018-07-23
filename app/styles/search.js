@@ -1,14 +1,17 @@
 import { StyleSheet } from 'react-native'
 
-const header = StyleSheet.create({
+const search = StyleSheet.create({
   wrapper: {
-    flex: 1,
+    width: 60,
+    height: 30,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginTop: 15,
+    marginBottom: 20,
   },
   text: {
-    fontSize: 38,
-    fontWeight: 'bold',
+    paddingLeft: 5,
+    paddingRight: 5,
   },
   button: {
     flexDirection: 'column',
@@ -16,4 +19,4 @@ const header = StyleSheet.create({
   },
 })
 
-export default header
+export default search
